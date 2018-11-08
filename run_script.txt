@@ -1,0 +1,28 @@
+// start kafka zookeper service
+docker-compose up -d
+
+// create topic
+docker exec -it kafka opt/kafka/bin/kafka-topics.sh --create --topic Topic3 --replication-factor 1 --partitions 1 --zookeeper zookeeper:2181
+
+// check topics
+docker exec -it kafka opt/kafka/bin/kafka-topics.sh --list --zookeeper zookeeper:2181
+
+// start topic producer
+docker exec -it kafka opt/kafka/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic Topic3
+
+// start topic cosumer
+docker exec -it kafka opt/kafka/bin/kafka-console-consumer.sh --topic Topic3 --from-beginning --bootstrap-server localhost:9092
+
+// zookeeper
+
+// connect to zookeeper cli
+docker exec -it zookeeper bin/zkCli.sh -server 127.0.0.1:2181
+
+// list root
+ls /
+
+// list brokers
+ls /brokers
+
+// list topics
+ls /brokers/topics
