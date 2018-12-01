@@ -1,3 +1,7 @@
+// check ip
+ipconfig
+// set new ip to docker file
+
 // start kafka zookeper service
 docker-compose up -d
 
@@ -6,6 +10,9 @@ docker exec -it kafka opt/kafka/bin/kafka-topics.sh --create --topic Topic3 --re
 
 // check topics
 docker exec -it kafka opt/kafka/bin/kafka-topics.sh --list --zookeeper zookeeper:2181
+
+// describe topics
+docker exec -it kafka opt/kafka/bin/kafka-topics.sh --describe --topic  Topic3 --zookeeper zookeeper:2181
 
 // start topic producer
 docker exec -it kafka opt/kafka/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic Topic3
@@ -26,3 +33,4 @@ ls /brokers
 
 // list topics
 ls /brokers/topics
+
