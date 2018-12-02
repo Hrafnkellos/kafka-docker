@@ -1,24 +1,22 @@
-// check ip
-ipconfig
-// set new ip to docker file
-
 // start kafka zookeper service
 docker-compose up -d
 
 // create topic
-docker exec -it kafka opt/kafka/bin/kafka-topics.sh --create --topic Topic3 --replication-factor 1 --partitions 1 --zookeeper zookeeper:2181
+docker exec -it kafka usr/bin/kafka-topics --create --topic Topic3 --replication-factor 2 --partitions 2 --zookeeper zookeeper:2181
 
 // check topics
-docker exec -it kafka opt/kafka/bin/kafka-topics.sh --list --zookeeper zookeeper:2181
+docker exec -it kafka usr/bin/kafka-topics --list --zookeeper zookeeper:2181
 
 // describe topics
-docker exec -it kafka opt/kafka/bin/kafka-topics.sh --describe --topic  Topic3 --zookeeper zookeeper:2181
+docker exec -it kafka usr/bin/kafka-topics --describe --topic  Topic3 --zookeeper zookeeper:2181
 
 // start topic producer
-docker exec -it kafka opt/kafka/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic Topic3
+docker exec -it kafka usr/bin/kafka-console-producer --broker-list localhost:9092 --topic Topic3
+docker exec -it kafka2 usr/bin/kafka-console-producer --broker-list kafka2:9092 --topic Topic3
 
 // start topic cosumer
-docker exec -it kafka opt/kafka/bin/kafka-console-consumer.sh --topic Topic3 --from-beginning --bootstrap-server localhost:9092
+docker exec -it kafka usr/bin/kafka-console-consumer --topic Topic3 --from-beginning --bootstrap-server localhost:9092
+docker exec -it kafka2 usr/bin/kafka-console-consumer --topic Topic3 --from-beginning --bootstrap-server localhost:9092
 
 // zookeeper
 
@@ -34,3 +32,4 @@ ls /brokers
 // list topics
 ls /brokers/topics
 
+docker exec -it kafka bash -c "seq 42 | kafka-console-producer --broker-list kafka2:9092 kafka:9092 --topic Topic3 && echo 'Produced 42 messages.'"
